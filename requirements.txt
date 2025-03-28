@@ -1,0 +1,11 @@
+st-pages
+numba
+numpy
+math
+dask
+duckdb
+pandas
+shutil
+plotly.express
+oracledb
+dotenv
