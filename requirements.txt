@@ -1,7 +1,6 @@
 st-pages
 numba
 numpy
-math
 dask
 duckdb
 pandas
