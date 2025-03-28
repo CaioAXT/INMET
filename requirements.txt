@@ -4,7 +4,6 @@ numpy
 dask
 duckdb
 pandas
-shutil
-plotly.express
+plotly
 oracledb
-dotenv
+python-dotenv
