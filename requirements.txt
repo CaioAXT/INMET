@@ -1,4 +1,4 @@
-st-pages
+st_pages
 numba
 numpy
 dask
