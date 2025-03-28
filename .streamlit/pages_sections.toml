@@ -1,0 +1,28 @@
+# .streamlit/pages_sections.toml
+
+
+[[pages]]
+path = "paginas\\Mapa.py"
+name = "Mapa de Estações"
+icon = "📍"
+
+
+[[pages]]
+name = "Estudo de Ampacidade"
+icon = "⚡"
+is_section = true   # <<< Indica que este item NÃO é página e sim um título de seção
+
+[[pages]]
+path = "paginas\\Ampacidade\\Dadosdeentrada.py"
+name = "Dados de Entrada"
+icon = "📋"
+
+[[pages]]
+path = "paginas\\Ampacidade\\RiscoTermico.py"
+name = "Ver Risco Térmico"
+icon = "🌡️"
+
+[[pages]]
+path = "paginas\\Ampacidade\\IntervalosDeMedicao.py"
+name = "Ver intervalos de Medição"
+icon = "📈"
