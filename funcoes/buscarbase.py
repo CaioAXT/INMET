@@ -31,9 +31,6 @@ def BuscarBaseINMETporEstacoes(listaestacoes: list):
 
 
 def BuscarEstacoes():
-    ORACLE_USER = os.getenv("ORACLE_USER")
-    ORACLE_PASSWORD = os.getenv("ORACLE_PASSWORD")
-    ORACLE_DSN = os.getenv("ORACLE_DSN")
 
     connection = oracledb.connect(
         user=ORACLE_USER, password=ORACLE_PASSWORD, dsn=ORACLE_DSN
