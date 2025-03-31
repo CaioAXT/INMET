@@ -9,7 +9,7 @@ jobs:
     steps:  
       - uses: actions/checkout@v4  
       - name: Sync with Hugging Face  
-        uses: huggingface/action-hf-hub@v1.0.0  
+        uses: huggingface/action-hf-hub@v2.0.0  
         with:  
           repo: "CaioAXT/INMET"  # Seu repositório Hugging Face Space  
           token: ${{ secrets.HF_TOKEN }}  
