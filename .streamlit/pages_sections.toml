@@ -6,6 +6,10 @@ path = "paginas//Mapa.py"
 name = "Mapa de Estações"
 icon = "📍"
 
+[[pages]]
+path = "paginas//Normas.py"
+name = "Banco de Normas"
+icon = "📍"
 
 [[pages]]
 name = "Estudo de Ampacidade"
@@ -26,3 +30,13 @@ icon = "🌡️"
 path = "paginas//Ampacidade//IntervalosDeMedicao.py"
 name = "Ver intervalos de Medição"
 icon = "📈"
+
+[[pages]]
+name = "Estudo de Clima"
+icon = "☁️"
+is_section = true 
+
+[[pages]]
+path = "paginas//Clima//Clima.py"
+name = "Dados de Entrada"
+icon = "📋"
