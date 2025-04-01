@@ -77,11 +77,11 @@ else:
         df_risco = pd.concat([df_risco, df_riscounitario], ignore_index=True)
 
     df_risco = df_risco.style.set_properties(**{"width": "1000px"})
-    st.dataframe(df_risco, width=1000)
+    st.dataframe(df_risco, hide_index=True, width=1000)
     st.subheader("")
     st.title("Base de Dados")
     st.subheader("")
-    st.dataframe(st.session_state.df_total)
+    st.dataframe(st.session_state.df_total, hide_index=True)
 
     def convert_df(df):
         return df.to_csv(index=False).encode("utf-8")

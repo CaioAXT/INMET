@@ -1,11 +1,11 @@
 import streamlit as st
 import plotly.express as px
 
-st.dataframe(st.session_state.df_diretriz)
 
 if st.session_state.df_diretriz is None:
     map_center = st.session_state.df_pontos
 else:
+    st.dataframe(st.session_state.df_diretriz, hide_index=True)
     map_center = st.session_state.df_diretriz
     map_center["Classificação do Ponto"] = map_center["Classificação do Ponto"].fillna(
         "Fora do Buffer"
