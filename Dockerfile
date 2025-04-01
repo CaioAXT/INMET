@@ -1,4 +1,3 @@
-# Usar uma imagem base do Python
 FROM python:3.13.1
  
 # Instalar dependências do sistema
@@ -7,18 +6,16 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
  
 # Definir o diretório de trabalho
-WORKDIR /
+WORKDIR /app
  
-# Copiar os arquivos necessários para o contêiner
-COPY . /app
+# Copiar os arquivos para o contêiner
+COPY . .
  
 # Instalar bibliotecas Python
 RUN pip install --no-cache-dir -r requirements.txt
  
-# Expor a porta caso seja necessário
+# Expor a porta usada pelo app (ajuste se não for 8080)
 EXPOSE 8080
  
-# Definir o comando padrão para executar o bot
+# Comando padrão
 CMD ["python", "app.py"]
-
- 
