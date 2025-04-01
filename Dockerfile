@@ -15,7 +15,7 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
  
 # Expor a porta usada pelo app (ajuste se não for 8080)
-EXPOSE 8080
+EXPOSE 8501
  
 # Comando padrão
 CMD ["python", "app.py"]
