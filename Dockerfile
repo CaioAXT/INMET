@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
  
 # Definir o diretório de trabalho
-WORKDIR /app
+WORKDIR /
  
 # Copiar os arquivos para o contêiner
 COPY . .
