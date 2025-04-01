@@ -7,11 +7,6 @@ name = "Mapa de Estações"
 icon = "📍"
 
 [[pages]]
-path = "paginas//Normas.py"
-name = "Banco de Normas"
-icon = "📍"
-
-[[pages]]
 name = "Estudo de Ampacidade"
 icon = "⚡"
 is_section = true   # <<< Indica que este item NÃO é página e sim um título de seção
@@ -33,10 +28,10 @@ icon = "📈"
 
 [[pages]]
 name = "Estudo de Clima"
-icon = "☁️"
 is_section = true 
+icon = "☀️"
 
 [[pages]]
 path = "paginas//Clima//Clima.py"
 name = "Dados de Entrada"
-icon = "📋"
+icon = "☁️"
