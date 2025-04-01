@@ -29,22 +29,21 @@ if st.session_state.df_diretriz is None:
         height=1200,
         size_max=2,
     )
-else:
-    if st.session_state.df_diretriz is None:
-        fig = px.scatter_mapbox(
-            map_center,
-            lat="Longitude",
-            lon="Latitude",
-            hover_name="Estacao",
-            color="Classificação do Ponto",
-            zoom=3,
-            center={
-                "lat": map_center["Longitude"].mean(),
-                "lon": map_center["Latitude"].mean(),
-            },
-            height=1200,
-            size_max=2,
-        )
+elif st.session_state.df_diretriz is not None:
+    fig = px.scatter_mapbox(
+        map_center,
+        lat="Longitude",
+        lon="Latitude",
+        hover_name="Estacao",
+        color="Classificação do Ponto",
+        zoom=3,
+        center={
+            "lat": map_center["Longitude"].mean(),
+            "lon": map_center["Latitude"].mean(),
+        },
+        height=1200,
+        size_max=2,
+    )
 
 
 fig.update_traces(marker=dict(size=10))

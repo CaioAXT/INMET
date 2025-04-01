@@ -213,8 +213,12 @@ if not PontosVertices.equals(st.session_state.df_pontos_vertices):
 
 aplicarpontosinseridos = st.button("Aplicar")
 
-if aplicarpontosinseridos:
+if st.session_state.df_total is not None:
+    st.success(
+        "Dados disponíveis nas páginas 'Ver Risco Térmico' e 'Ver intervalos de medição'"
+    )
 
+if aplicarpontosinseridos:
     if PontosVertices.isnull().values.any() or not all(
         PontosVertices.iloc[:, 1:].applymap(lambda x: isinstance(x, float)).all(axis=1)
     ):
@@ -224,6 +228,7 @@ if aplicarpontosinseridos:
     else:
         st.success("Todas as informações foram preenchidas corretamente.")
         with st.spinner("Aguarde, estou consultando a Base do INMET..."):
+
             PontosDiretriz = diretriz(PontosVertices, 0.1)
 
             for index, row in PontosDiretriz.iterrows():
@@ -330,3 +335,7 @@ if aplicarpontosinseridos:
             st.session_state.df_diretriz = PontosCombinados
             st.session_state.df_total = df
             st.session_state.df_pontos = estacoesselecionadas
+
+        st.success(
+            "Dados disponíveis nas páginas 'Ver Risco Térmico' e 'Ver intervalos de medição'"
+        )
