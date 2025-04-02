@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
  
 # Definir o diretório de trabalho
-WORKDIR /app
+WORKDIR /
  
 # Copiar os arquivos para o contêiner
 COPY . .
@@ -15,7 +15,7 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
  
 # Expor a porta usada pelo app (ajuste se não for 8080)
-EXPOSE 8080
+EXPOSE 8501
  
 # Comando padrão
 CMD ["python", "app.py"]
