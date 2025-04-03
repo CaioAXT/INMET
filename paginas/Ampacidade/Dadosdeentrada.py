@@ -1,6 +1,6 @@
 import streamlit as st
 from funcoes.funcoes import diretriz, haversine, tcnom, parse_to_float
-from funcoes.buscarbase import BuscarBaseINMETporEstacoes
+from funcoes.buscarbase import BuscarBaseINMETporEstacoes, BuscarEstacoes
 import numpy as np
 import pandas as pd
 
@@ -228,19 +228,19 @@ if aplicarpontosinseridos:
     else:
         st.success("Todas as informações foram preenchidas corretamente.")
         with st.spinner("Aguarde, estou consultando a Base do INMET..."):
-
+            PontosEstacoestemporario = BuscarEstacoes()
             PontosDiretriz = diretriz(PontosVertices, 0.1)
 
             for index, row in PontosDiretriz.iterrows():
                 nom = row["Estacao"]
                 lat = row["Latitude"]
                 long = row["Longitude"]
-                for index, row in st.session_state.df_pontos.iterrows():
+                for index, row in PontosEstacoestemporario.iterrows():
                     nom_est = row["Estacao"]
                     nom_lat = row["Latitude"]
                     nom_long = row["Longitude"]
                     if (
-                        haversine(lat1=lat, lon1=long, lat2=nom_lat, lon2=nom_long)
+                        haversine(lat1=long, lon1=lat, lat2=nom_long, lon2=nom_lat)
                         <= buffer
                     ):
                         estacoesselecionadas.append(nom_est)
@@ -324,10 +324,14 @@ if aplicarpontosinseridos:
             )
 
             df = df[df["Tcnom"] != 249.99]
+            PontosEstacoestemporario = PontosEstacoestemporario[
+                PontosEstacoestemporario["Estacao"].isin(estacoesselecionadas)
+            ]
+            print(PontosEstacoestemporario)
 
             PontosCombinados = pd.concat(
                 [
-                    st.session_state.df_pontos,
+                    PontosEstacoestemporario,
                     PontosDiretriz,
                 ],
                 ignore_index=True,

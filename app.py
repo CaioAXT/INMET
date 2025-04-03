@@ -13,6 +13,10 @@ if "df_pontos" not in st.session_state or st.session_state.df_pontos is None:
     # Estações Selecionadas (dentro do buffer)
     st.session_state.df_pontos = BuscarEstacoes()
 
+if "estacoes" not in st.session_state:
+    # Base completa do INMET com todas as estações selecionadas
+    st.session_state.estacoes = BuscarEstacoes()
+
 if "df_total" not in st.session_state:
     # Base completa do INMET com todas as estações selecionadas
     st.session_state.df_total = None
@@ -78,36 +82,10 @@ def resetar_base():
     )
     shutil.rmtree("funcoes/__pycache__", ignore_errors=True)
     if st.button("Sim, resetar agora", type="primary"):
+        st.session_state.df_pontos = BuscarEstacoes()
         st.session_state.df_total = None
         st.session_state.df_diretriz = None
         st.session_state.df_clima = None
-        st.session_state.df_pontos_vertices = pd.DataFrame(
-            columns=["Nome do Vertice", "Latitude", "Longitude"],
-            data=[["P1", 0.0, 0.0]],
-        )
-        st.session_state.inputs = {
-            "buffer": 0,
-            "idnom": 0.0,
-            "innom": 0.0,
-            "vdnom": 0.0,
-            "vnnom": 0.0,
-            "idsobrec": 0.0,
-            "insobrec": 0.0,
-            "vdsobrec": 0.0,
-            "vnsobrec": 0.0,
-            "tensao": 0,
-            "diamentrototal": 0.0,
-            "diamentroaluminio": 0.0,
-            "coefabsorsolar": 0.0,
-            "condutor": "",
-            "feixe": 0,
-            "rdc20cc": 0.0,
-            "epsilon": 0.0,
-            "alturamediadalt": 0,
-            "coefvarrestemp": 0.0,
-            "tcnom_min": 20,
-            "tcnom_max": 200,
-        }
         st.success("Base resetada com sucesso!")
 
 

@@ -55,8 +55,8 @@ def diretriz(PontosVertices, distancia_km: float):
                     Numeroponto += 1
                     PontosNovos.loc[Numeroponto] = [
                         f"{nom} - Intermediário {j}",
-                        lon_inter,
                         lat_inter,
+                        lon_inter,
                         "Diretriz da LT",
                     ]
 
