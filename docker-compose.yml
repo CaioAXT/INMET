@@ -3,25 +3,10 @@ services:
   streamlit-app:
     build: .
     ports:
-      - "8501:8501"  # Porta padrão do Streamlit [[6]]
+      - "8501:8501"
     volumes:
-      - .:/app  # Para recarregar automático durante desenvolvimento [[8]]
+      - .:/app
     environment:
       - STREAMLIT_SERVER_PORT=8501
       - STREAMLIT_SERVER_ADDRESS=0.0.0.0
-    # Se usar banco de dados, adicione dependência aqui
-    # depends_on:
-    #   - db
-
-  # Exemplo de serviço de banco de dados (se aplicável):
-  # db:
-  #   image: postgres:14
-  #   environment:
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: mydb
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-
-# volumes:
-#   postgres_data:
+      - DATABASE_URL=postgresql://usuario:senha@10.100.3.10:5432/nomedobanco
