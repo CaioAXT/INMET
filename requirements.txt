@@ -7,3 +7,4 @@ pandas
 plotly
 oracledb
 python-dotenv
+psycopg2
