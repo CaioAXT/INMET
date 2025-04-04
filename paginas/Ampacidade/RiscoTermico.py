@@ -22,7 +22,10 @@ else:
             "Tcsobrec_99 (em ºC)",
         ]
     )
-    listasobrecarga = []
+    listasobrecarga99 = []
+    listasobrecarga95 = []
+    listanominal99 = []
+    listanominal85 = []
     for estacao in sorted(st.session_state.df_pontos):
         df_estacao = st.session_state.df_total[
             st.session_state.df_total["Estacao"] == estacao
@@ -52,7 +55,10 @@ else:
                 ],
             }
         )
-        listasobrecarga.append(df_estacao["Tcsobrec"].quantile(0.99))
+        listasobrecarga99.append(df_estacao["Tcsobrec"].quantile(0.99))
+        listasobrecarga95.append(df_estacao["Tcsobrec"].quantile(0.95))
+        listanominal99.append(df_estacao["Tcnom"].quantile(0.99))
+        listanominal85.append(df_estacao["Tcnom"].quantile(0.85))
         df_risco = pd.concat([df_risco, df_riscounitario], ignore_index=True)
 
     df_risco = df_risco.style.set_properties(**{"width": "1000px"})
@@ -60,9 +66,8 @@ else:
     st.subheader("")
     # endregion
 
-    col1, col2 = st.columns(2)
-    with col1:
-        # region Mapa
+    with st.expander("Mapa Geral"):
+        # region Mapa Geral
         fig = px.scatter_mapbox(
             st.session_state.df_diretriz,
             lat="Longitude",
@@ -85,57 +90,221 @@ else:
         st.plotly_chart(fig)
         # endregion
 
-    with col2:
-        # region Risco Térmico Gráfico
-        df_diretriz_filtrada = st.session_state.df_diretriz[
-            st.session_state.df_diretriz["Classificação do Ponto"] != "Dentro do Buffer"
-        ]
-        estacoes_filtradas = st.session_state.df_diretriz[
-            st.session_state.df_diretriz["Classificação do Ponto"] == "Dentro do Buffer"
-        ]
+    with st.expander("Gráficos Nominal"):
+        col1, col2 = st.columns(2)
+        with col1:
+            # region Risco Térmico Gráfico - Sobrec 99%
+            df_diretriz_filtrada = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                != "Dentro do Buffer"
+            ]
+            estacoes_filtradas = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                == "Dentro do Buffer"
+            ]
 
-        i = 0
+            i = 0
 
-        for row in df_diretriz_filtrada.itertuples():
-            pontointermediario = row.Estacao
-            latpontointermediario = row.Latitude
-            longpontointermediario = row.Longitude
-            num = 0
-            listaisotocas = []
-            for estacao_row in estacoes_filtradas.itertuples():
-                estacaoisotoca = estacao_row.Estacao
-                latestacaoisotoca = estacao_row.Latitude
-                longestacaoisotoca = estacao_row.Longitude
-                temp = listasobrecarga[num]
-                valorisotoca = (
-                    1
-                    / np.sqrt(
-                        (latestacaoisotoca - latpontointermediario) ** 2
-                        + (longestacaoisotoca - longpontointermediario) ** 2
-                    )
-                ) * temp
-                num += 1
-                listaisotocas.append(valorisotoca)
-            df_diretriz_filtrada.loc[i, "Temp. Sobrecarga"] = np.mean(listaisotocas)
-            i += 1
-        fig = px.density_mapbox(
-            df_diretriz_filtrada,
-            lat="Longitude",
-            lon="Latitude",
-            z="Temp. Sobrecarga",
-            radius=10,
-            height=735,
-            center={
-                "lat": df_diretriz_filtrada["Longitude"].mean(),
-                "lon": df_diretriz_filtrada["Latitude"].mean(),
-            },
-            zoom=7,
-            mapbox_style="open-street-map",
-            color_continuous_scale=px.colors.sequential.YlOrRd,
-            hover_data=["Estacao"],
-        )
-        st.plotly_chart(fig)
-        # endregion
+            for row in df_diretriz_filtrada.itertuples():
+                pontointermediario = row.Estacao
+                latpontointermediario = row.Latitude
+                longpontointermediario = row.Longitude
+                num = 0
+                listaisotocas = []
+                for estacao_row in estacoes_filtradas.itertuples():
+                    estacaoisotoca = estacao_row.Estacao
+                    latestacaoisotoca = estacao_row.Latitude
+                    longestacaoisotoca = estacao_row.Longitude
+                    temp = listanominal85[num]
+                    valorisotoca = (
+                        1
+                        / np.sqrt(
+                            (latestacaoisotoca - latpontointermediario) ** 2
+                            + (longestacaoisotoca - longpontointermediario) ** 2
+                        )
+                    ) * temp
+                    num += 1
+                    listaisotocas.append(valorisotoca)
+                df_diretriz_filtrada.loc[i, "Temp. Nominal"] = np.mean(listaisotocas)
+                i += 1
+            fig = px.density_mapbox(
+                df_diretriz_filtrada,
+                lat="Longitude",
+                lon="Latitude",
+                z="Temp. Nominal",
+                radius=10,
+                height=735,
+                center={
+                    "lat": df_diretriz_filtrada["Longitude"].mean(),
+                    "lon": df_diretriz_filtrada["Latitude"].mean(),
+                },
+                zoom=7,
+                mapbox_style="open-street-map",
+                color_continuous_scale=px.colors.sequential.YlOrRd,
+                hover_data=["Estacao"],
+            )
+            st.plotly_chart(fig)
+        with col2:
+            # region Risco Térmico Gráfico - Sobrec 99%
+            df_diretriz_filtrada = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                != "Dentro do Buffer"
+            ]
+            estacoes_filtradas = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                == "Dentro do Buffer"
+            ]
+
+            i = 0
+
+            for row in df_diretriz_filtrada.itertuples():
+                pontointermediario = row.Estacao
+                latpontointermediario = row.Latitude
+                longpontointermediario = row.Longitude
+                num = 0
+                listaisotocas = []
+                for estacao_row in estacoes_filtradas.itertuples():
+                    estacaoisotoca = estacao_row.Estacao
+                    latestacaoisotoca = estacao_row.Latitude
+                    longestacaoisotoca = estacao_row.Longitude
+                    temp = listanominal99[num]
+                    valorisotoca = (
+                        1
+                        / np.sqrt(
+                            (latestacaoisotoca - latpontointermediario) ** 2
+                            + (longestacaoisotoca - longpontointermediario) ** 2
+                        )
+                    ) * temp
+                    num += 1
+                    listaisotocas.append(valorisotoca)
+                df_diretriz_filtrada.loc[i, "Temp. Nominal"] = np.mean(listaisotocas)
+                i += 1
+            fig = px.density_mapbox(
+                df_diretriz_filtrada,
+                lat="Longitude",
+                lon="Latitude",
+                z="Temp. Nominal",
+                radius=10,
+                height=735,
+                center={
+                    "lat": df_diretriz_filtrada["Longitude"].mean(),
+                    "lon": df_diretriz_filtrada["Latitude"].mean(),
+                },
+                zoom=7,
+                mapbox_style="open-street-map",
+                color_continuous_scale=px.colors.sequential.YlOrRd,
+                hover_data=["Estacao"],
+            )
+            st.plotly_chart(fig)
+            # endregion
+
+    with st.expander("Gráficos Sobrecarga"):
+        col1, col2 = st.columns(2)
+        with col1:
+            # region Risco Térmico Gráfico - Sobrec 99%
+            df_diretriz_filtrada = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                != "Dentro do Buffer"
+            ]
+            estacoes_filtradas = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                == "Dentro do Buffer"
+            ]
+
+            i = 0
+
+            for row in df_diretriz_filtrada.itertuples():
+                pontointermediario = row.Estacao
+                latpontointermediario = row.Latitude
+                longpontointermediario = row.Longitude
+                num = 0
+                listaisotocas = []
+                for estacao_row in estacoes_filtradas.itertuples():
+                    estacaoisotoca = estacao_row.Estacao
+                    latestacaoisotoca = estacao_row.Latitude
+                    longestacaoisotoca = estacao_row.Longitude
+                    temp = listasobrecarga95[num]
+                    valorisotoca = (
+                        1
+                        / np.sqrt(
+                            (latestacaoisotoca - latpontointermediario) ** 2
+                            + (longestacaoisotoca - longpontointermediario) ** 2
+                        )
+                    ) * temp
+                    num += 1
+                    listaisotocas.append(valorisotoca)
+                df_diretriz_filtrada.loc[i, "Temp. Sobrecarga"] = np.mean(listaisotocas)
+                i += 1
+            fig = px.density_mapbox(
+                df_diretriz_filtrada,
+                lat="Longitude",
+                lon="Latitude",
+                z="Temp. Sobrecarga",
+                radius=10,
+                height=735,
+                center={
+                    "lat": df_diretriz_filtrada["Longitude"].mean(),
+                    "lon": df_diretriz_filtrada["Latitude"].mean(),
+                },
+                zoom=7,
+                mapbox_style="open-street-map",
+                color_continuous_scale=px.colors.sequential.YlOrRd,
+                hover_data=["Estacao"],
+            )
+            st.plotly_chart(fig)
+        with col2:
+            # region Risco Térmico Gráfico - Sobrec 99%
+            df_diretriz_filtrada = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                != "Dentro do Buffer"
+            ]
+            estacoes_filtradas = st.session_state.df_diretriz[
+                st.session_state.df_diretriz["Classificação do Ponto"]
+                == "Dentro do Buffer"
+            ]
+
+            i = 0
+
+            for row in df_diretriz_filtrada.itertuples():
+                pontointermediario = row.Estacao
+                latpontointermediario = row.Latitude
+                longpontointermediario = row.Longitude
+                num = 0
+                listaisotocas = []
+                for estacao_row in estacoes_filtradas.itertuples():
+                    estacaoisotoca = estacao_row.Estacao
+                    latestacaoisotoca = estacao_row.Latitude
+                    longestacaoisotoca = estacao_row.Longitude
+                    temp = listasobrecarga99[num]
+                    valorisotoca = (
+                        1
+                        / np.sqrt(
+                            (latestacaoisotoca - latpontointermediario) ** 2
+                            + (longestacaoisotoca - longpontointermediario) ** 2
+                        )
+                    ) * temp
+                    num += 1
+                    listaisotocas.append(valorisotoca)
+                df_diretriz_filtrada.loc[i, "Temp. Sobrecarga"] = np.mean(listaisotocas)
+                i += 1
+            fig = px.density_mapbox(
+                df_diretriz_filtrada,
+                lat="Longitude",
+                lon="Latitude",
+                z="Temp. Sobrecarga",
+                radius=10,
+                height=735,
+                center={
+                    "lat": df_diretriz_filtrada["Longitude"].mean(),
+                    "lon": df_diretriz_filtrada["Latitude"].mean(),
+                },
+                zoom=7,
+                mapbox_style="open-street-map",
+                color_continuous_scale=px.colors.sequential.YlOrRd,
+                hover_data=["Estacao"],
+            )
+            st.plotly_chart(fig)
+            # endregion
 
     # region Base de Dados
     st.title("Base de Dados")
