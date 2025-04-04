@@ -64,6 +64,3 @@ def BuscarEstacoes():
     cursor.close()
     connection.close()
     return df
-
-
-print(BuscarBaseINMETporEstacoes(["Resende"]))
