@@ -2,8 +2,21 @@ import streamlit as st
 import plotly.express as px
 from funcoes.buscarbase import BuscarEstacoes
 import pandas as pd
+from dotenv import load_dotenv
 
 st.session_state.estacoes = BuscarEstacoes()
+import os
+
+load_dotenv()
+
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+
+print(POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB)
+
 
 st.session_state.estacoes = st.session_state.estacoes[
     ~st.session_state.estacoes["Estacao"].isin(list(st.session_state.df_pontos))
