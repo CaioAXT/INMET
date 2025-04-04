@@ -1,8 +1,11 @@
 import streamlit as st
+from time import sleep
 from st_pages import add_page_title, get_nav_from_toml
 import pandas as pd
 import shutil
 from funcoes.buscarbase import BuscarEstacoes
+
+sleep(100000)
 
 st.set_page_config(page_title="Estudos AXT", page_icon="📊", layout="wide")
 
