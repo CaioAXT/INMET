@@ -60,7 +60,10 @@ def BuscarEstacoes():
 
     rows = cursor.fetchall()
     df = pd.DataFrame(rows, columns=[desc[0] for desc in cursor.description])
-
+    df[["Latitude", "Longitude"]] = df[["Latitude", "Longitude"]].applymap(
+        lambda x: float(str(x).replace(",", "."))
+    )
+    df["Latitude"], df["Longitude"] = df["Longitude"].copy(), df["Latitude"].copy()
     cursor.close()
     connection.close()
     return df
